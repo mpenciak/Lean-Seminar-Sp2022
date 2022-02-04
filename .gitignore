@@ -8,3 +8,6 @@
 *snm
 *.synctex.gz
 *.toc
+*.olean
+/_target
+/leanpkg.path
