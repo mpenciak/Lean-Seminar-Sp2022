@@ -69,7 +69,7 @@
     \begin{itemize}
         \item lean (Lean 3): This is the essence of Lean. It includes the interpreter
         \item elan: (Kind of like venv for Python or cabal for Haskell)
-        \item leanpkg: A built-in
+        \item leanpkg: A built-in dependency and package manager (like pip for Python)
     \end{itemize}
 
 \end{frame}
@@ -133,7 +133,11 @@
     \verb!leanproject! is an amalgamation scripts that run leanpkg to set up the structure of the Lean project and add mathlib as a dependency, and git to get all the dependencies. 
     \vspace{10pt}
 
-    Keep up to date by running \verb!leanproject pull! occasionally. 
+    Keep up to date by running \verb!leanproject pull! occasionally.
+    \vspace{10pt}
+    \pause
+
+    It may be worth putting all of your completed exercises in a separate folder, so they don't accidentally get deleted in a merge. 
 \end{frame}
 
 \begin{frame}[fragile]
@@ -156,4 +160,61 @@
     Everything should be working if when you open \verb!/src/week1/Demo1.lean! your editor doesn't yell at you, and the ``lean infoview'' panel opens automatically. 
 \end{frame}
 
+\begin{frame}
+    \frametitle{Navigating Mathlib}
+
+    Mathlib is huge and built up of a ton of files. You will often find yourself needing to figure out what's already been done, where it's written down, and how to import and use that specific result
+    \vspace{10pt}
+    \pause 
+
+    Any leanproject has a copy of mathlib which you can navigate through in a variety of different ways:
+    \begin{enumerate}
+        \item Just scrolling through the folders. The folders are organized by subject area, and lemma names are chosen to be descriptive. 
+        \item Searching using the built-in VS Code search. 
+        \item Using the online mathlib documentation \url{https://leanprover-community.github.io/mathlib_docs/index.html}. 
+        \item Other handy QOL additions (ctrl-click, links in the infoview, etc...). 
+    \end{enumerate}
+
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Importing and dealing with namespaces}
+
+    For example, if I need a basic result about group actions that I found in 
+
+    \verb!_target/deps/mathlib/src/! \verb!group_theory/group_actions/basic.lean!
+    
+    write:
+    \verb!import group_theory.group_action.basic! at the top of the file.
+    \vspace{10pt}
+    \pause
+
+    This is because \verb!leanpkg.toml! has \verb!_target/deps/mathlib/src! in its path, so all we need to tell Lean is how to get to our file from there. 
+    \pause
+    Also imports have to be the first lines of the file (weird quirk about Lean)
+
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Using the lemmas}
+    Another way Lean helps reduce conflicts been different object names is by using \emph{namespaces}. 
+    You will likely have seen something like \verb!namespace mul_action!, which tells you everything in that particular section has to be cited as \verb!mul_action.what_I_want!.
+    \vspace{10pt} 
+    \pause
+
+    Note: Namespaces are separate from import location. This is similar to languages like C and C++ (what Lean was originally written in), but should be contrasted with how things work in Python.
+    \vspace{10pt}
+    \pause
+
+    A quick way to see if you've gotten the import rights is to use \verb!#check object_name!. If Lean can properly find that object, then it'll report back with it's type. 
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Goals for next time}
+
+    Try to finish up the Natural Number Game \url{https://www.ma.imperial.ac.uk/~buzzard/xena/natural_number_game/}
+    \vspace{20pt}
+
+    Work on the short exercise sheet found at \verb!src/week2/exercises.lean! where you'll go on a scavenger hunt through mathlib!
+\end{frame}
 \end{document}

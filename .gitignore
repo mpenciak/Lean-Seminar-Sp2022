@@ -2,7 +2,7 @@
 *.fdb_latexmk
 *.fls
 *.nav
-*log
+*.log
 *.nav
 *.vrb
 *.out
