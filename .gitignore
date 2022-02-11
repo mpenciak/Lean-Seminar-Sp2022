@@ -4,8 +4,9 @@
 *.nav
 *log
 *.nav
+*.vrb
 *.out
-*snm
+*.snm
 *.synctex.gz
 *.toc
 *.olean
