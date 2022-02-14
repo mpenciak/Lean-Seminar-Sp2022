@@ -1,6 +1,6 @@
 [package]
-name = "Projects"
-version = "0.1"
+name = "Learning Lean Seminar Spring 2022"
+version = "0.2"
 lean_version = "leanprover-community/lean:3.39.0"
 path = "src"
 
