@@ -9,23 +9,30 @@ It also has multi-line comments
 * **have**
 * `Markdown`
 * _Formatting_
+* [A good guide for MD syntax](https://www.markdownguide.org/basic-syntax/). 
 -/
 
-/- Remember the import statements, in this case it imports the file in some directory
-`something_in_leans_path/data/nat/basic.lean`. They have to be at the top of the file. -/
+/- 
+Remember the import statements, in this case it imports the file in some directory
+`something_in_leans_path/data/nat/basic.lean`. They have to be at the top of the file. 
+-/
 import data.nat.basic
 import algebra.group.basic
 
 
-/- Opens a namespace. Now everything in this portion of code will be accessible 
-as `random_examples.thing` -/
+/- 
+Opens a namespace. Now everything in this portion of code will be accessible 
+as `random_examples.thing` 
+-/
 namespace random_examples
 
 -- `end random_examples` is a few lines down
 
 
-/- Makes everything in a namespace accessible. Note, this is slightly different from namespace/end.
-Nothing in this file will enter the nat namespace for example. -/
+/- 
+Makes everything in a namespace accessible. Note, this is slightly different from namespace/end.
+Nothing in this file will enter the nat namespace for example. 
+-/
 open nat
 
 
@@ -62,7 +69,10 @@ open nat
 
 
 
--- A quick one-line format for defining things (being purposefully vague with the word things).
+/-
+A quick one-line format for defining things (being purposefully vague with the word things).
+Subscripts can be typed using \1 \2 \3, ..., \9
+-/
 def definition_name (input₁ : Sort) (input₂ : Type): Type 0 := sorry
 
 
@@ -74,13 +84,15 @@ begin
   sorry
 end
 
-/- If something is important enough it deserves to be called a theorem!
-Notice you can get pretty wild with the whitespace. -/
+/- 
+If something is important enough it deserves to be called a theorem!
+Notice you can get pretty wild with the whitespace. 
+-/
 theorem theorem_name (
   same : Type
   )
   : 
-  ℕ ≃ list ℕ
+  ℕ = list ℕ
   := 
   by sorry
 
@@ -117,8 +129,10 @@ end random_examples
 
 
 
-/- Opening a section is a good way of portioning out your code off by common assumptions. 
-You can name sections which can help Lean know which section to close when you say `end`. -/
+/- 
+Opening a section is a good way of portioning out your code off by common assumptions. 
+You can name sections which can help Lean know which section to close when you say `end`. 
+-/
 section
 
 -- There's an `end` a few lines down which ends the current section. 
@@ -129,12 +143,16 @@ section
 lemma lemma₁ (assumption₁ : Type) (assumption₂ : Type): Prop := sorry
 lemma lemma₂ (assumption₁ : Type) (assumption₂ : Type): Prop := sorry
 
-/-Instead we can define variables that will persist until the end of the section and become
-available in each assumption. They can be implicit or explicit. -/
+/-
+Instead we can define variables that will persist until the end of the section and become
+available in each assumption. They can be implicit or explicit. 
+-/
 variables (a : ℕ) (b : ℕ) 
 
-/- Notice we didn't include `a` and `b` as variables in this lemma, but it knows they exist because
-of the variables above. -/
+/- 
+Notice we didn't include `a` and `b` as variables in this lemma, but it knows they exist because
+of the variables above. 
+-/
 lemma random_lemma (h: a = b) : a = a :=
 begin
   refl 
@@ -142,14 +160,18 @@ end
 
 
 
-/- Lean is also smart and only includes variables in the assumptions that are actually referenced.
-Check out the context by putting your cusor after `by` but before the actual proof. -/ 
+/- 
+Lean is also smart and only includes variables in the assumptions that are actually referenced.
+Check out the context by putting your cusor after `by` but before the actual proof. 
+-/ 
 lemma other_random_lemma : a < a + 1 := by exact lt_add_one a
 
 
 
-/- Sometimes you'll see lemmas or theorems with proofs that don't have `begin` and `end`. These 
-are still valid proofs, but are instead called _proof terms_. We'll talk about those next time! -/
+/- 
+Sometimes you'll see lemmas or theorems with proofs that don't have `begin` and `end`. These 
+are still valid proofs, but are instead called _proof terms_. We'll talk about those next time! 
+-/
 lemma last_random_lemma : a ≥ b ∨ a < b := le_or_lt b a
 
 -- This ends the un-named section
@@ -182,47 +204,59 @@ end
 
 
 
-/- Sometimes it's helpful to define constants and do local calculations to test out what works and
-doesn't work, but they shouldn't be part of your theorems or proofs. -/
+/- 
+Sometimes it's helpful to define constants and do local calculations to test out what works and
+doesn't work, but they shouldn't be part of your theorems or proofs. 
+-/
 constants (pointless_constant : Type)
 
-/- We've seen `#check` before, it's helpful to figure out what the type of something is to test 
-things out while proving stuff. There's some tricky type theory going on with the outputs. -/
+/- 
+We've seen `#check` before, it's helpful to figure out what the type of something is to test 
+things out while proving stuff. There's some tricky type theory going on with the outputs. 
+-/
 #check pointless_constant
 #check last_random_lemma
 
 
 
-/- Starting the section called `random-section`. -/
+-- Starting the section called `random-section`.
 section random_section
 
-/- Here we see a new kind of variable declaration using the brackets `[]` (and our old friend, 
+/- 
+Here we see a new kind of variable declaration using the brackets `[]` (and our old friend, 
 the implicit variable declaration `{}`). This is basically saying that we're carrying around 
-some un-named hypothesis that G has a way of multiplying its elements throughout. -/
+some un-named hypothesis that G has a way of multiplying its elements throughout. 
+-/
 variables {G: Type} [has_mul G] (g h : G)
 
-#check g*h
+#check g * h
 
 end random_section
 
 
 
-/- Actually we want to use more than just -/
+/- 
+Actually we want to use more than just the fact that we can multiply elements. We want the
+multiplication to have some properties so that we can reason about it. Below we add in the
+assumption that G is a group, and all that comes along with it.
+-/
 section stuff_about_groups
-variables {G: Type}  [group G] (g h : G)
+variables {G: Type} [group G] (g h : G)
 
 #check g⁻¹
 
 
 -- You'll see examples often in demo documents. These are basically un-named lemmas. 
-example : g * (g⁻¹ * h) = h :=
+example (a b : G) : a * (a⁻¹ * b) = b :=
 begin
   rw ←mul_assoc,
   rw mul_right_inv,
   rw one_mul,
 end
 
-/- This is something more indicative of what you'll find in mathlib. There's a lot going on in
+
+/- 
+This is something more indicative of what you'll find in mathlib. There's a lot going on in
 this lemma, so lets take some time to piece it all together.
 
 * `@[simp, to_additive]` tags the lemma with the `simp` and `to_additive` attributes. Don't worry
@@ -249,10 +283,16 @@ end
 
 
 example (a b c d : ℕ) (hyp : c = d*a + b) (hyp' : b = a*d) : c = 2*a*d :=
-/- think about the sequence of moves if you start with hyp and go forward by rewriting with
-hyp', mul_comm, two_mul, mul_assoc-/
+/- 
+think about the sequence of moves if you start with hyp and go forward by rewriting with
+hyp', mul_comm, two_mul, mul_assoc
+-/
 by rw [hyp, hyp', mul_comm, two_mul, add_mul]
 
+
+example (a : ℕ) : a < a + 2 :=
+calc a   < a + 1 : lt_add_one a
+...  < a + 2 : lt_add_one (a + 1)
 
 end stuff_about_groups
 
@@ -289,9 +329,11 @@ end stuff_about_groups
 
 
 
-/- In lean files where new objects are defined you may see the following kinds of constructions
+/-
+In lean files where new objects are defined you may see the following kinds of constructions
 For now don't worry too much about the differences between `structure` and `class`. Structures 
-and classes are defined in terms of providing a bunch of different fields. -/
+and classes are defined in terms of providing a bunch of different fields. 
+-/
 structure three_numbers := 
   (num1 : ℕ)
   (num2 : ℕ)
@@ -299,8 +341,10 @@ structure three_numbers :=
 
 #check three_numbers.num1
 
-/- Here is the _class_ of a Group together with an extra point I call step which has as one of
-its hypotheses that it's not the identity. -/
+/-
+Here is the _class_ of a Group together with an extra point I call step which has as one of
+its hypotheses that it's not the identity.
+-/
 class group_with_step (G : Type) extends group G :=
     (step : G)
     (step_neq_one : step ≠ 1)
@@ -310,9 +354,11 @@ class group_with_step (G : Type) extends group G :=
 
 
 
-/- You may not see this too often in mathlib, but you can define inductive datatypes (whatever 
+/-
+You may not see this too often in mathlib, but you can define inductive datatypes (whatever 
 those are) using the following kind of declaration. In this case, I'm defining a datatype with
-two elements. -/
+two elements.
+-/
 inductive z2 : Type
 | e : z2
 | s : z2
@@ -324,8 +370,10 @@ inductive z2 : Type
 
 open z2
 
-/- As you can see I can play around with it just like in any other functional programming
-language. -/
+/-
+As you can see I can play around with it just like in any other functional programming
+language.
+-/
 def z2_mul : z2 → z2 → z2
 | e e := e
 | e s := s
@@ -336,14 +384,17 @@ def z2_mul : z2 → z2 → z2
 
 
 
-/- `#eval` evaluates the function. It's kind of what you would expect form an actual programming
-language (which we shuldn't forget is exactly what Lean is). -/
+/-
+`#eval` evaluates the function. It's kind of what you would expect form an actual programming
+language (which we shuldn't forget is exactly what Lean is).
+-/
 #eval z2_mul s s
 
-/- Here I'm saying that z2 has multiplication. -/
+-- Here I'm saying that z2 has multiplication.
 instance : has_mul z2 := {mul := z2_mul}
 
-/- We can now use the `*` for our function, because that's precisely how we defined the operation.
+/-
+We can now use the `*` for our function, because that's precisely how we defined the operation.
 The `*` symbol is just another alias for `has_mul.mul`. We can go back and forth between the infix
 and regular notation by putting the operator in `()`. All of the following lines are doing the
 exact same thing.
@@ -358,8 +409,10 @@ exact same thing.
 
 
 
-/- We can even make things print out nicer by telling Lean how to represent the elements of my 
-structure. First we define the `z2_repr` function which has a reasonable looking type. -/  
+/-
+We can even make things print out nicer by telling Lean how to represent the elements of my 
+structure. First we define the `z2_repr` function which has a reasonable looking type.
+-/  
 
 def z2_repr : z2 → string
 | e := "1"
@@ -416,8 +469,10 @@ instance : group z2 := sorry
 
 -- On second thought, maybe not...
 
-/- There are also a lot of keywords that you may encounter. We'll get to them eventually as well, 
-but it's not super critical to understand what they're all saying for now. -/
+/-
+There are also a lot of keywords that you may encounter. We'll get to them eventually as well, 
+but it's not super critical to understand what they're all saying for now.
+-/
 
 universes u v 
 
