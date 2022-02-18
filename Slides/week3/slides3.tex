@@ -1,0 +1,165 @@
+\documentclass{beamer}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb,amsmath,amsfonts,amsthm}
+\usepackage{mathrsfs}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{color}
+
+\definecolor{keywordcolor}{rgb}{0.7, 0.1, 0.1}   % red
+\definecolor{tacticcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{commentcolor}{rgb}{0.4, 0.4, 0.4}   % grey
+\definecolor{symbolcolor}{rgb}{0.0, 0.1, 0.6}    % blue
+\definecolor{sortcolor}{rgb}{0.1, 0.5, 0.1}      % green
+\definecolor{attributecolor}{rgb}{0.7, 0.1, 0.1} % red
+
+\def\lstlanguagefiles{../lstlean.tex}
+\lstset{language=lean}
+
+\title{Proving theorems in Lean}
+\author{Matej Penciak}
+\institute{Northeastern University}
+\date{February 18, 2022 \\ Slides available at: \\ \url{https://github.com/mpenciak/Lean-Seminar-Sp2022}}
+
+\begin{document}
+
+% Title Slide
+\frame{\titlepage}
+
+\begin{frame}[fragile]
+    \frametitle{Plan for today, and glimpses at the future}
+
+    \begin{itemize}
+        %\item Learning to parse a mathlib \verb!.lean! file
+        \item A review of the tactics from the Natural Number Game
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Comments, imports, and namespaces}
+
+    \begin{lstlisting}
+        -- single line
+        /- 
+            comment 
+        -/
+
+        import lean.module
+
+        namespace name_space
+
+        open other_name_space
+
+        end name_space
+    \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Definitions, lemmas, theorems, and their proofs}
+
+    \begin{lstlisting}
+    def definition_name (assumptions : their_types) 
+        : type_of_output := sorry
+
+    lemma lemma_name {implicit : assumptions} 
+        : lemma_type :=
+    begin
+        sorry
+    end
+
+    theorem theorem_name (
+        same : stuff
+        )
+        : 
+        usually_Prop
+        := 
+        by sorry
+    
+    \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{sections, variables, examples, constants, \#check}
+
+    \begin{lstlisting}
+        section section_name
+        variables (var1 : type)
+        end
+
+        example (no : name) : any_type : = 
+        begin
+            sorry
+        end
+
+        constants (G : Type) (a : G) (b : G)
+        variable [group G]
+        #check a * b
+    \end{lstlisting}
+
+\end{frame}
+
+ \begin{frame}[fragile]
+    \frametitle{Attributes, lemma names, calc mode, term proofs, ...}
+
+    \begin{lstlisting}
+    variables (a b c : nat)
+
+    @[simp, to_additive] 
+    lemma mul_right_eq_self : a * b = a <-> b = 1 :=
+    calc a * b = a ↔ a * b = a * 1 : by rw mul_one
+    ...            ↔ b = 1         : mul_left_cancel_iff
+    \end{lstlisting}
+ \end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Structures, classes, inductive data types, instances}
+
+    \begin{lstlisting}
+        structure structure_name := 
+            (constructor1 : constructor_type)
+            (constructor2 : constructor_type)
+            (constructor3 : constructor_type)
+
+        class class_name (any : hypotheses) 
+              extends other_class :=
+                    (constructor1 : constructor_type)
+
+        inductive inductive_name : its_type
+        | cons1 : type1
+        | cons1 : type2
+
+        instance : class_name := sorry
+    \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Lots of other stuff!}
+
+    \begin{lstlisting}
+        universes univ1 univ2 
+
+        variables (type_depending_on_a_univ : Type univ1)
+
+        noncomputable theory
+
+        section 
+
+        local attribute [simp] add_assoc
+
+        end
+    \end{lstlisting}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Available resources}
+
+    Lots of resources with links in the demo3.lean file!
+\end{frame}
+
+\end{document}
