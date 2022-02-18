@@ -6,7 +6,7 @@ It also has multi-line comments
 
 ## can
 
-* have
+* **have**
 * `Markdown`
 * _Formatting_
 -/
@@ -247,7 +247,17 @@ begin
   ...            ↔ g⁻¹ = h : by rw eq_comm
 end
 
+
+example (a b c d : ℕ) (hyp : c = d*a + b) (hyp' : b = a*d) : c = 2*a*d :=
+/- think about the sequence of moves if you start with hyp and go forward by rewriting with
+hyp', mul_comm, two_mul, mul_assoc-/
+by rw [hyp, hyp', mul_comm, two_mul, add_mul]
+
+
 end stuff_about_groups
+
+
+
 
 
 
@@ -304,18 +314,23 @@ class group_with_step (G : Type) extends group G :=
 those are) using the following kind of declaration. In this case, I'm defining a datatype with
 two elements. -/
 inductive z2 : Type
-| g1 : z2
-| g2 : z2
+| e : z2
+| s : z2
+
+-- This is exactly how nat is defined!
+#check nat
+
+-- In fact, check out
 
 open z2
 
 /- As you can see I can play around with it just like in any other functional programming
 language. -/
 def z2_mul : z2 → z2 → z2
-| g1 g1 := g1
-| g1 g2 := g2
-| g2 g1 := g2
-| g2 g2 := g1
+| e e := e
+| e s := s
+| s e := s
+| s s := e
 
 
 
@@ -323,13 +338,20 @@ def z2_mul : z2 → z2 → z2
 
 /- `#eval` evaluates the function. It's kind of what you would expect form an actual programming
 language (which we shuldn't forget is exactly what Lean is). -/
-#eval z2_mul g2 g2
+#eval z2_mul s s
 
 /- Here I'm saying that z2 has multiplication. -/
 instance : has_mul z2 := {mul := z2_mul}
 
--- We can now use the `*` for our function, because that's precisely how we defined the operation. 
-#eval g1 * g2
+/- We can now use the `*` for our function, because that's precisely how we defined the operation.
+The `*` symbol is just another alias for `has_mul.mul`. We can go back and forth between the infix
+and regular notation by putting the operator in `()`. All of the following lines are doing the
+exact same thing.
+-/
+#eval e * s
+#eval has_mul.mul e s
+#eval (*) e s
+#eval ( * s) e 
 
 
 
@@ -340,17 +362,17 @@ instance : has_mul z2 := {mul := z2_mul}
 structure. First we define the `z2_repr` function which has a reasonable looking type. -/  
 
 def z2_repr : z2 → string
-| g1 := "g1"
-| g2 := "g2"
+| e := "1"
+| s := "σ"
 
 -- Next we tell Lean that z2 has a string representation given by that function. 
 instance : has_repr z2 := { repr := z2_repr}
 
 -- Now everything shows up nicely!
-#eval g2 * g1
+#eval s * e
 
 -- Here we'll show that it actually is a group!
-instance : group_with_step z2 := sorry
+instance : group z2 := sorry
 
 
 
@@ -410,6 +432,9 @@ local attribute [simp] add_assoc
 end
 
 -- And other exotic things like open_locale and stuff I'm probably forgetting to mention.
+
+
+
 
 
 
@@ -503,6 +528,4 @@ Finally there's the actual documentation:
 * _Lean Reference Manual_ <https://leanprover.github.io/reference/>
 
 * _mathlib Documentation_ <https://leanprover-community.github.io/mathlib_docs/>
-
-
 -/
