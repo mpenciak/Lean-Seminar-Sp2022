@@ -7,7 +7,7 @@ Storing all of the content from the Learning Lean Seminar from Spring 2022
 If you have the whole Lean toolchain up and running <https://leanprover-community.github.io/get_started.html> then the best way of getting everything off this repo is by running
 
 ```[bash]
-leanproject get https://github.com/mpenciak/Lean-Seminar-Sp2022.git
+leanproject get mpenciak/Lean-Seminar-Sp2022.git
 ```
 
 If you don't have it all working, then simply running
@@ -23,5 +23,7 @@ leanproject pull
 ```
 
 to get all of the mathlib files.
+
+It is also recommended that any exercise files you work on should be saved in a separate completed_exercises directory to avoid any erasing that may happen with merging from git. 
 
 If none of this makes sense yet, that's ok! We'll talk about it soon in the seminar soon!
