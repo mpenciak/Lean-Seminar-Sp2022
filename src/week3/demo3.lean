@@ -71,9 +71,9 @@ open nat
 
 /-
 A quick one-line format for defining things (being purposefully vague with the word things).
-Subscripts can be typed using \1 \2 \3, ..., \9
+Subscripts can be typed using \1 \2 \3, ..., \9, \0 
 -/
-def definition_name (input₁ : Sort) (input₂ : Type): Type 0 := sorry
+def definition_name (input₁ : Sort) (input₂ : Type) : Type 0 := sorry
 
 
 -- You'll see a lot of lemmas. 
@@ -147,15 +147,15 @@ lemma lemma₂ (assumption₁ : Type) (assumption₂ : Type): Prop := sorry
 Instead we can define variables that will persist until the end of the section and become
 available in each assumption. They can be implicit or explicit. 
 -/
-variables (a : ℕ) (b : ℕ) 
-
+-- variables (a : ℕ) (b : ℕ) 
+variables (a b : ℕ)
 /- 
 Notice we didn't include `a` and `b` as variables in this lemma, but it knows they exist because
 of the variables above. 
 -/
-lemma random_lemma (h: a = b) : a = a :=
+lemma random_lemma (h : a = b) : a = a :=
 begin
-  refl 
+  refl
 end
 
 
@@ -165,7 +165,6 @@ Lean is also smart and only includes variables in the assumptions that are actua
 Check out the context by putting your cusor after `by` but before the actual proof. 
 -/ 
 lemma other_random_lemma : a < a + 1 := by exact lt_add_one a
-
 
 
 /- 
@@ -227,7 +226,7 @@ Here we see a new kind of variable declaration using the brackets `[]` (and our 
 the implicit variable declaration `{}`). This is basically saying that we're carrying around 
 some un-named hypothesis that G has a way of multiplying its elements throughout. 
 -/
-variables {G: Type} [has_mul G] (g h : G)
+variables {G : Type} [has_mul G] (g h : G)
 
 #check g * h
 
@@ -241,17 +240,16 @@ multiplication to have some properties so that we can reason about it. Below we 
 assumption that G is a group, and all that comes along with it.
 -/
 section stuff_about_groups
-variables {G: Type} [group G] (g h : G)
-
+variables {G : Type} [group G] (g h : G)
+ 
 #check g⁻¹
-
+#check group.inv g
+#check _inst_1
 
 -- You'll see examples often in demo documents. These are basically un-named lemmas. 
 example (a b : G) : a * (a⁻¹ * b) = b :=
 begin
-  rw ←mul_assoc,
-  rw mul_right_inv,
-  rw one_mul,
+  rw [←mul_assoc, mul_right_inv, one_mul]
 end
 
 
@@ -287,7 +285,16 @@ example (a b c d : ℕ) (hyp : c = d*a + b) (hyp' : b = a*d) : c = 2*a*d :=
 think about the sequence of moves if you start with hyp and go forward by rewriting with
 hyp', mul_comm, two_mul, mul_assoc
 -/
-by rw [hyp, hyp', mul_comm, two_mul, add_mul]
+-- by rw [hyp, hyp', mul_comm, two_mul, add_mul]
+begin
+  calc c = d*a + b   : by exact hyp
+  ...    = d*a + a*d : by rw hyp'
+  ...    = a*d + a*d : by rw mul_comm
+  ...    = (a + a)*d : by rw add_mul
+  ...    = 2*a*d     : by rw two_mul
+end
+
+#check two_mul
 
 
 example (a : ℕ) : a < a + 2 :=
@@ -366,7 +373,6 @@ inductive z2 : Type
 -- This is exactly how nat is defined!
 #check nat
 
--- In fact, check out
 
 open z2
 
@@ -389,6 +395,7 @@ def z2_mul : z2 → z2 → z2
 language (which we shuldn't forget is exactly what Lean is).
 -/
 #eval z2_mul s s
+#eval z2_mul s e
 
 -- Here I'm saying that z2 has multiplication.
 instance : has_mul z2 := {mul := z2_mul}
@@ -415,8 +422,8 @@ structure. First we define the `z2_repr` function which has a reasonable looking
 -/  
 
 def z2_repr : z2 → string
-| e := "1"
-| s := "σ"
+| e := "e"
+| s := "s"
 
 -- Next we tell Lean that z2 has a string representation given by that function. 
 instance : has_repr z2 := { repr := z2_repr}
@@ -425,8 +432,22 @@ instance : has_repr z2 := { repr := z2_repr}
 #eval s * e
 
 -- Here we'll show that it actually is a group!
-instance : group z2 := sorry
-
+instance : group z2 := { mul := _,
+  mul_assoc := _,
+  one := _,
+  one_mul := _,
+  mul_one := _,
+  npow := _,
+  npow_zero' := _,
+  npow_succ' := _,
+  inv := _,
+  div := _,
+  div_eq_mul_inv := _,
+  zpow := _,
+  zpow_zero' := _,
+  zpow_succ' := _,
+  zpow_neg' := _,
+  mul_left_inv := _ }
 
 
 
