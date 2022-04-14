@@ -1,8 +1,9 @@
 import tactic
 
 /-
-The goal for this demo is to introduce the last major piece of the Lean language that's used 
-regularly in mathlib. This is the **type class** system. 
+The goal for next week is to introduce the last major piece of the Lean language that's used 
+regularly in mathlib. This is the **type class** system. But before we do that, lets finish talking
+about the underlying logic of Lean.
 
 First recall how we got here: Proving theorems in Lean amounts to constructing terms of the right 
 type. For example we prove the next example four times. But fundamentall all 4 proofs are exactly
